@@ -1,0 +1,25 @@
+apply plugin: 'java'  
+apply plugin: 'maven-publish' 
+
+repositories {  
+  mavenCentral()  
+  
+  maven { 
+    url "http://localhost:8082/nexus/content/groups/public/"  
+    credentials { 
+      username 'admin' 
+      password 'admin123' 
+    } 
+   }
+} 
+
+dependencies {
+    compile('redis.clients:jedis:2.4.2')
+    compile('log4j:log4j:1.2.17')
+    compile('com.alibaba:fastjson:1.+')
+}
+
+task copyJars(type: Copy) { 
+    from configurations.runtime
+    into "webapp/WEB-INF/lib"
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta  content="IE=edge,chrome=1">
+	<title>Title</title>
+
+	<link rel="stylesheet" href="./css/style.min.css" />
+
+</head>
+<body style="width:100%; text-align:center">
+	<h1>Gradven Redis</h1>
+<table border=""  style="width:90%; height:300px; text-align:center">
+<tr>
+<td><div id="tree"></div></td>
+<td>
+	<table border="1" style="width:100%; height:100%; text-align:center	">
+	<tr><td style="text-align:right;">id:</td><td><div id="id"></div></td></tr>
+	<tr><td style="text-align:right;">host:</td><td><div id="host"></div></td></tr>
+	<tr><td style="text-align:right;">port:</td><td><div id="port"></div></td></tr>
+	<tr><td style="text-align:right;">timeout:</td><td><div id="timeout"></div></td></tr>
+	<tr><td style="text-align:right;">maxIdle:</td><td><div id="maxIdle"></div></td></tr>
+	<tr><td style="text-align:right;">minIdle:</td><td><div id="minIdle"></div></td></tr>
+	<tr><td style="text-align:right;">maxWaitMillis:</td><td><div id="maxWaitMillis"></div></td></tr>
+	</table>
+</td>
+</tr>
+<tr><td colspan=2>
+<input type="button" name="start to manage" value="start to manage"/>
+</td></tr>
+</table>
+
+    <script src="./js/jquery.min.js"></script>
+	<script src="./js/jstree.min.js"></script>
+
+	<script>
+	// ajax demo
+	$('#tree').on("changed.jstree", function (e, data) {
+			if(data.selected.length) {
+				
+				$.ajax({
+				type: "post",
+				url: "/gradvenRedis/servlet/redisservlet?id=" + data.instance.get_node(data.selected[0]).id,
+				timeout : 3000 ,
+				dataType : 'json',//	
+				success: function(data){
+					
+				$('#id').html(data.id);
+				$('#host').html(data.host);
+				$('#port').html(data.port);
+				$('#timeout').html(data.timeout);
+				$('#maxIdle').html(data.maxIdle);
+				$('#minIdle').html(data.minIdle);
+				$('#maxWaitMillis').html(data.maxWaitMillis);
+				
+				},	
+				error: function(){	
+				
+				$('#id').html("null");
+				$('#host').html("null");
+				$('#port').html("null");
+				$('#timeout').html("null");
+				$('#maxIdle').html("null");
+				$('#minIdle').html("null");
+				$('#maxWaitMillis').html("null");
+				
+				
+				}
+			});
+							
+			    
+			}
+		})
+	.jstree({
+		'core' : {
+			'data' : {
+				"url" : "json/redis_servers.json",
+				"dataType" : "json" // needed only if you do not supply JSON headers
+			}
+		},
+		"types" : {
+			"#" : { "max_children" : 1, "max_depth" : 4, "valid_children" : ["root"] },
+			"root" : { "icon" : "./images/tree_icon.png", "valid_children" : ["default"] },
+			"default" : { "valid_children" : ["default","file"] },
+			"file" : { "icon" : "./images/glyphicon-file.png", "valid_children" : [] }
+		},
+		"plugins" : [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
+	});
+	</script>
+</body>
+</html>
