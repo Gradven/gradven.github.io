@@ -23,6 +23,16 @@
           "maxIdle":100,
           "minIdle":20,
           "maxWaitMilis":1000
+      },
+      {
+          "id":3,
+          "text":"10.211.127.1",
+          "host":"10.211.127.1",
+          "port":6379,
+          "timeout":100,
+          "maxIdle":100,
+          "minIdle":20,
+          "maxWaitMilis":1000
       }
    ]
 }]

@@ -9,10 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSON;
+import com.gradven.redisclient.JedisUtil;
 import com.gradven.redisclient.RedisServerManager;
 import com.gradven.redisclient.redisinfo.RedisServer;
 
 public class RedisServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3649539839025454557L;
 
 	/**
 	 * Constructor of the object.
@@ -58,6 +64,62 @@ public class RedisServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		String type = request.getParameter("type");
+		
+		if (type == null || type.equals("undefined"))
+		{
+			this.getRedisServerById(request, response);
+		}
+		else if(type.equals("1"))
+		{
+			//test redis server is connected
+	
+			this.testRedisIsConnected(request, response);
+			
+		}
+
+	}
+	
+	/**
+	 * test Redis Is Connected
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	private void testRedisIsConnected(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		response.setContentType("text/json");
+		
+		String id = request.getParameter("id");
+		
+		if (id == null || id.equals("undefined") || id.trim().equals(""))
+		{
+			return;
+		}
+		
+		RedisServer rs = RedisServerManager.getRedisServerById(id);
+		
+		String retString = "";
+		if (JedisUtil.isConnected(id))
+		{
+			retString = JSON.toJSONString(rs);
+		}
+		else
+		{
+			retString = "{\"host\":\""+rs.getHost()+"\"," +"\"port\":"+ rs.getPort() +", \"code\": \"connected is error!\"}";
+		}
+		
+		PrintWriter out = response.getWriter();
+
+		out.println(retString);
+		out.flush();
+		out.close();
+		
+		
+	}
+	
+	private void getRedisServerById(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
 		response.setContentType("text/json");
 		
 		String id = request.getParameter("id");
@@ -87,6 +149,7 @@ public class RedisServlet extends HttpServlet {
 		out.println(redisJson);
 		out.flush();
 		out.close();
+		
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>top.html</title>
+    <title>GradvenRedis</title>
 	
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
@@ -12,6 +12,53 @@
   </head>
   
   <body>
-    <span><b>GradvenRedis</b></span>
+    <span style="font-size:30px"><b>GradvenRedis</b></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    |&nbsp;Conn:<span id=currentredis></span> &nbsp;|&nbsp;
+    <a href=redis.html target="_parent" >Conn Settings</a>
+    
+    <script src="./js/jquery.min.js"></script>
+ 
+    <script>
+    
+    //获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.parent.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]);
+            return null; //返回参数值
+    }
+    
+    
+ 	$.ajax({
+	type: "post",
+	url: "/gradvenRedis/servlet/redisservlet?type=1&id=" +  getUrlParam("id"),
+	timeout : 3000 ,
+	dataType : 'json',//	
+	success: function(data){
+	
+	if (data.code == "connected is error!")
+	{
+	   alert(data.host +":"+data.port +"  " +data.code);
+	   $('#currentredis').html(data.host +":"+data.port +"  " +data.code);
+	}
+	else
+	{
+	   $('#currentredis').html(data.host +":"+data.port);
+	}
+		
+	
+   
+	
+	},	
+	error: function(){	
+	
+	alert("error");
+	
+	}
+});
+    
+    </script>
+    
   </body>
 </html>

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
@@ -14,6 +16,8 @@ import redis.clients.jedis.ScanResult;
  * @create date 2015年8月1日 下午2:52:06
  */
 public class JedisUtil {
+	
+	private static Logger logger = Logger.getLogger(JedisUtil.class);  
 	
 	/**
 	 * scan redis
@@ -73,6 +77,33 @@ public class JedisUtil {
 		return ret;
 		
 	} 
+	
+	/**
+	 * test redis server is alive.
+	 * @param redisid
+	 * @return
+	 */
+	public static boolean isConnected(String redisid)
+	{
+		try
+		{
+			RedisConnection rc = RedisConnFactory.getRedisConn(redisid);
+			
+			Jedis jedis = rc.getRedisConn();
+			
+			jedis.set("test_redis_server_is_connected", "1");
+			jedis.del("test_redis_server_is_connected");
+		}
+		catch (Exception e) 
+		{		
+			logger.error("redis connected is error:");
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		return true;
+	}
 	
 	
 	
