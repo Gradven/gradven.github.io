@@ -11,14 +11,38 @@
 
   </head>
   
-  <body>
-    <div><b><span style="font-size:20px">Connection</span></b></div>
-    <div><a href="">Conn Parameter</a></div>
-    <div><b><span style="font-size:20px">Server</span></b></div>
-    <div><a href="">Settings</a></div>
-    <div><a href="">Statistic</a></div>
-    <div><b><span style="font-size:20px">Read & Write</span></b></div>
-    <div><a href="">Read</a></div>
-    <div><a href="">Write</a></div>
+  <script type="text/javascript">
+  function go2conn()
+  {   
+     top.frames['mainFrame'].location.href = "right_conn.html";
+  }
+  
+  function go2settings()
+  {
+     
+     top.frames['mainFrame'].location.href = "right_settings.html";
+     
+  }
+  
+  function go2read()
+  {
+     
+     top.frames['mainFrame'].location.href = "right_read.html";
+     
+  }
+  
+  </script>
+  
+  <body style="background:#F0F0F0;">
+    <div>&nbsp;&nbsp;<b><span style="font-size:20px">Connection</span></b></div>
+    <div>&nbsp;&nbsp;<a href="#" onClick="go2conn()">Conn Parameter</a></div>
+    <br/>
+    <div>&nbsp;&nbsp;<b><span style="font-size:20px">Server</span></b></div>
+    <div>&nbsp;&nbsp;<a href="#" onClick="go2settings()">Settings</a></div>
+    <div>&nbsp;&nbsp;<a href="">Statistic</a></div>
+    <br/>
+    <div>&nbsp;&nbsp;<b><span style="font-size:20px">Read & Write</span></b></div>
+    <div>&nbsp;&nbsp;<a href="#" onClick="go2read()">Read</a></div>
+    <div>&nbsp;&nbsp;<a href="">Write</a></div>
   </body>
-</html>
+</html>	
