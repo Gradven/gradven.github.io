@@ -14,4 +14,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <url-pattern>/servlet/redisservlet</url-pattern>
   </servlet-mapping>
 
+<session-config>
+<session-timeout>30</session-timeout> 
+</session-config>
+
 </web-app>

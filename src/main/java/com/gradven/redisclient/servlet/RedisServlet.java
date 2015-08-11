@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.gradven.redisclient.JedisUtil;
@@ -68,12 +69,16 @@ public class RedisServlet extends HttpServlet {
 		
 		if (type == null || type.equals("undefined"))
 		{
+			//just query redis server information
 			this.getRedisServerById(request, response);
+			
+			//set redis id into session
+			HttpSession session = request.getSession();
+			session.setAttribute("redisId", request.getParameter("id"));
 		}
 		else if(type.equals("1"))
 		{
-			//test redis server is connected
-	
+			//test redis server is connected	
 			this.testRedisIsConnected(request, response);
 			
 		}
