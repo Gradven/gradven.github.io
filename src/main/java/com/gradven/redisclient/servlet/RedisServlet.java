@@ -66,6 +66,20 @@ public class RedisServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String type = request.getParameter("type");
+		String redisdb = request.getParameter("redisdb");
+		
+		System.out.println("=========redisdb:" + type);
+		int iRedisdb = 0;
+		if (redisdb == null || redisdb.equals(""))
+		{
+			iRedisdb = 0;
+		}
+		else
+		{
+			iRedisdb = Integer.parseInt(redisdb);
+		}
+		
+		HttpSession session = request.getSession();
 		
 		if (type == null || type.equals("undefined"))
 		{
@@ -73,13 +87,23 @@ public class RedisServlet extends HttpServlet {
 			this.getRedisServerById(request, response);
 			
 			//set redis id into session
-			HttpSession session = request.getSession();
+			
 			session.setAttribute("redisId", request.getParameter("id"));
 		}
 		else if(type.equals("1"))
 		{
 			//test redis server is connected	
 			this.testRedisIsConnected(request, response);
+			
+		}
+		else if (type.equals("2"))	
+		{
+			//redis query value by key
+			String redisId = (String) session.getAttribute("redisId");
+			String querykey = request.getParameter("querykey");
+			
+			String ret = JedisUtil.queryValue(querykey, redisId, iRedisdb);
+			this.printWriteOut(ret, response);
 			
 		}
 
@@ -114,12 +138,7 @@ public class RedisServlet extends HttpServlet {
 			retString = "{\"host\":\""+rs.getHost()+"\"," +"\"port\":"+ rs.getPort() +", \"code\": \"connected is error!\"}";
 		}
 		
-		PrintWriter out = response.getWriter();
-
-		out.println(retString);
-		out.flush();
-		out.close();
-		
+		this.printWriteOut(retString, response);
 		
 	}
 	
@@ -148,13 +167,18 @@ public class RedisServlet extends HttpServlet {
 			redisJson = "null redis server!";
 		}
 		
+		this.printWriteOut(redisJson, response);
+
 		
+	}
+	
+	private void printWriteOut(String str, HttpServletResponse response) throws IOException
+	{
 		PrintWriter out = response.getWriter();
 
-		out.println(redisJson);
+		out.println(str);
 		out.flush();
 		out.close();
-		
 	}
 
 	/**

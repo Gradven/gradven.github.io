@@ -10,16 +10,64 @@
     <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
 
   </head>
+  <script src="./js/jquery.js"></script>
+  <script type="text/javascript">
+    function queryValueByKey()
+	{
+	    var redisdb = $('#redisdb').val();
+	    
+	    alert(redisdb);
+	
+	    var querykey = $('#querykey').val();
+	
+   		$.ajax({
+			type: "post",
+			url: "/gradvenRedis/servlet/redisservlet?type=2&redisdb=" + redisdb +"&querykey=" + querykey,
+			timeout : 3000 ,	
+			success: function(data){
+				
+			   $('#showValue').html(data);
+					
+			},	
+			error: function()
+			{				
+			  alert("error!");
+						
+			}
+		});
+	}
+  
+  </script>
   
   <body>
     Read Data<br/>
     <hr>
     <div style="background:#E0E0E0; color:black">
     <br/>
-    &nbsp;&nbsp;KEY:<input type="text" size=60 id="querykey">
-     <input type="button" name="submitkey" value="submit"/>
+    &nbsp;&nbsp;KEY:<input type="text" size=60 name="querykey" id=querykey />
+    <select id=redisdb>
+    <option value="0">db0</option>
+    <option value="1">db1</option>
+    <option value="2">db2</option>
+    <option value="3">db3</option>
+    <option value="4">db4</option>
+    <option value="5">db5</option>
+    <option value="6">db6</option>
+    <option value="7">db7</option>
+    <option value="8">db8</option>
+    <option value="9">db9</option>
+    <option value="10">db10</option>
+    <option value="11">db11</option>
+    <option value="12">db12</option>
+    <option value="13">db13</option>
+    <option value="14">db14</option>
+    <option value="15">db15</option>
+    </select>
+     <input type="button" name="submitkey" value="submit" onClick="queryValueByKey()"/>
     <br/>
     <br/>
      </div>
+     result:
+     <div id=showValue></div>
   </body>
 </html>

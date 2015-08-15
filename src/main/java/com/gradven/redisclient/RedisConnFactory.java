@@ -11,6 +11,7 @@ public class RedisConnFactory {
 	
 	public static RedisConnection getRedisConn(String redisId)
 	{
+		//if find RedisConnection, return RedisConnection;
 		for (RedisConnection rc : connList)
 		{
 			if (rc.getRedisServer().getId().equals(redisId))
@@ -19,6 +20,7 @@ public class RedisConnFactory {
 			}
 		}
 		
+		//if cant't find RedisConnection, load RedisConnection from config file;
 		RedisServer redisServer = RedisServerManager.getRedisServerById(redisId);
 		
 		RedisConnection rc = new RedisConnection(redisServer);

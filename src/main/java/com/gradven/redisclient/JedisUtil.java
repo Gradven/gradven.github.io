@@ -19,17 +19,23 @@ public class JedisUtil {
 	
 	private static Logger logger = Logger.getLogger(JedisUtil.class);  
 	
+	public static List<String> scanRedis(String pattern, int count, String redisId)
+	{
+		return scanRedis(pattern, count, redisId, 0);
+	}
+	
 	/**
 	 * scan redis
 	 * @return
 	 */
-	public static List<String> scanRedis(String pattern, int count, String redisId)
+	public static List<String> scanRedis(String pattern, int count, String redisId, int database)
 	{
         List<String> retList = new ArrayList<String>();
         
         RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
         
         Jedis jedis = rc.getRedisConn();
+        jedis.select(database);
         
         
         String scanRet = "0";
@@ -56,11 +62,12 @@ public class JedisUtil {
 		
 	}
 	
-	public static Set<String> queryKeys(String pattern, String redisId)
+	public static Set<String> queryKeys(String pattern, String redisId, int databse)
 	{
 		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
 		
 		Jedis jedis = rc.getRedisConn();
+		jedis.select(databse);
 		Set<String> ret = jedis.keys(pattern);
 		
 		return ret;
@@ -69,10 +76,28 @@ public class JedisUtil {
 	
 	public static String queryValue(String key, String redisId)
 	{
+		return queryValue(key, redisId, 0);
+	}
+	
+	public static String queryValue(String key, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return "The key is null or ''!!";
+		}
+		
 		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
 		
 		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
 		String ret = jedis.get(key);
+		
+		
+		if (ret == null || ret.equals(""))
+		{
+			return "The value is null!!";
+		}
 		
 		return ret;
 		
