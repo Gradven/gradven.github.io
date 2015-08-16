@@ -87,8 +87,8 @@
 				$.ajax({
 				type: "post",
 				url: "/gradvenRedis/servlet/redisservlet?id=" + data.instance.get_node(data.selected[0]).id,
+				dataType : 'json',
 				timeout : 3000 ,
-				dataType : 'json',//	
 				success: function(data){
 					
 				$('#id').html(data.id);

@@ -15,19 +15,35 @@
     function queryValueByKey()
 	{
 	    var redisdb = $('#redisdb').val();
-	    
-	    alert(redisdb);
 	
 	    var querykey = $('#querykey').val();
+	    
+	    
+	    if (querykey == "")
+	    {
+	       alert("key can't is empty!");
+	       return;
+	    }
 	
    		$.ajax({
 			type: "post",
-			url: "/gradvenRedis/servlet/redisservlet?type=2&redisdb=" + redisdb +"&querykey=" + querykey,
+			url: "/gradvenRedis/servlet/redisservlet?type=3&redisdb=" + redisdb +"&querykey=" + querykey,
 			timeout : 3000 ,	
+			dataType : 'json',
 			success: function(data){
-				
-			   $('#showValue').html(data);
-					
+	   
+			   $('#showValue').html(data.key + "" + data.keyType);
+			   
+			   var tbody = ""; 			   
+			   $.each(data, function(n, item) {  
+                    var trs = "";  
+                    trs += " <tr> <td> " + item.key +" </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
+                    tbody += trs;    
+                         
+                });  
+  
+              $("#project").append(tbody);  
+       			
 			},	
 			error: function()
 			{				
@@ -37,6 +53,18 @@
 		});
 	}
   
+  
+  function hideCount()
+  {
+     var target=document.getElementById("showcount");
+     target.style.display="none";
+  }
+  
+  function showCount()
+  {
+     var target=document.getElementById("showcount");
+     target.style.display="block";
+  }
   </script>
   
   <body>
@@ -44,7 +72,8 @@
     <hr>
     <div style="background:#E0E0E0; color:black">
     <br/>
-    &nbsp;&nbsp;KEY:<input type="text" size=60 name="querykey" id=querykey />
+    <form>
+    &nbsp;&nbsp;KEY:<input type="text" size=50 name="querykey" id=querykey />
     <select id=redisdb>
     <option value="0">db0</option>
     <option value="1">db1</option>
@@ -63,11 +92,20 @@
     <option value="14">db14</option>
     <option value="15">db15</option>
     </select>
-     <input type="button" name="submitkey" value="submit" onClick="queryValueByKey()"/>
-    <br/>
+    
+    
+    Count Limit:<input type="text" name="count" id=count value="10" size=5 />
+
+    &nbsp;
+    <input type="button" name="submitkey" value="submit" onClick="queryValueByKey()"/>
+    </form>
     <br/>
      </div>
      result:
-     <div id=showValue></div>
+     
+     <table  id = "project" border="1" > 
+     <tr> <th> name </th> <th>type</th> <th>size</th>  </tr>               
+     </table > 
+     
   </body>
 </html>

@@ -19,12 +19,20 @@ public class JedisUtil {
 	
 	private static Logger logger = Logger.getLogger(JedisUtil.class);  
 	
+	/**
+	 * default database
+	 * @param pattern
+	 * @param count
+	 * @param redisId
+	 * @return
+	 */
 	public static List<String> scanRedis(String pattern, int count, String redisId)
 	{
 		return scanRedis(pattern, count, redisId, 0);
 	}
 	
 	/**
+	 * return limit number key by pattern
 	 * scan redis
 	 * @return
 	 */
@@ -62,11 +70,40 @@ public class JedisUtil {
 		
 	}
 	
+	/**
+	 * return one type by one key
+	 * @param key
+	 * @param redisId
+	 * @param databse
+	 * @return
+	 */
+	public static String queryKeyType(String key, String redisId, int databse)
+	{
+		String keyType = "";
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(databse);
+		
+		keyType = jedis.type(key);
+				
+		return keyType;
+		
+	}
+	
+	/**
+	 * can return little data
+	 * @param pattern
+	 * @param redisId
+	 * @param databse
+	 * @return
+	 */
 	public static Set<String> queryKeys(String pattern, String redisId, int databse)
 	{
 		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
 		
 		Jedis jedis = rc.getRedisConn();
+		
 		jedis.select(databse);
 		Set<String> ret = jedis.keys(pattern);
 		
@@ -83,7 +120,7 @@ public class JedisUtil {
 	{
 		if (key == null || key.equals(""))
 		{
-			return "The key is null or ''!!";
+			return "The key is null or empty !!";
 		}
 		
 		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
@@ -96,12 +133,91 @@ public class JedisUtil {
 		
 		if (ret == null || ret.equals(""))
 		{
-			return "The value is null!!";
+			return "The value is null !!";
 		}
 		
 		return ret;
 		
 	} 
+	
+	/**
+	 * hash length
+	 * @param key
+	 * @param redisId
+	 * @param database
+	 * @return
+	 */
+	public static long hlen(String key, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return 0;
+		}
+		
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
+		long ret = jedis.hlen(key);
+		
+		jedis.llen(key);
+		
+		return ret;	
+		
+	}
+	
+	/**
+	 * List length
+	 * @param key
+	 * @param redisId
+	 * @param database
+	 * @return
+	 */
+	public static long llen(String key, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return 0;
+		}
+		
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
+		long ret = jedis.llen(key);
+		
+		
+		return ret;	
+		
+	}
+	
+	/**
+	 * set length
+	 * @param key
+	 * @param redisId
+	 * @param database
+	 * @return
+	 */
+	public static long scard(String key, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return 0;
+		}
+		
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
+		long ret = jedis.scard(key);
+		
+		
+		return ret;	
+		
+	}
 	
 	/**
 	 * test redis server is alive.

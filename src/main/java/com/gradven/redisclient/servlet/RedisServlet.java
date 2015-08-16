@@ -2,6 +2,8 @@ package com.gradven.redisclient.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 import com.gradven.redisclient.JedisUtil;
 import com.gradven.redisclient.RedisServerManager;
+import com.gradven.redisclient.redisinfo.RedisKeyInfo;
 import com.gradven.redisclient.redisinfo.RedisServer;
 
 public class RedisServlet extends HttpServlet {
@@ -68,7 +71,6 @@ public class RedisServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String redisdb = request.getParameter("redisdb");
 		
-		System.out.println("=========redisdb:" + type);
 		int iRedisdb = 0;
 		if (redisdb == null || redisdb.equals(""))
 		{
@@ -106,7 +108,90 @@ public class RedisServlet extends HttpServlet {
 			this.printWriteOut(ret, response);
 			
 		}
+		else if (type.equals("3"))
+		{
+			String keyInfoJson = "";
+			
+			//query key type by key string
+			String redisId = (String) session.getAttribute("redisId");
+			String querykey = request.getParameter("querykey");
+			String countStr = request.getParameter("count");
+			
+			int count = 0;
+			if (countStr == null || countStr.equals("") || countStr.equals("undefined"))
+			{
+				count = 10;
+			}
+			else
+			{
+				count = Integer.parseInt(countStr);
+			}
+				
+			
+			keyInfoJson = JSON.toJSONString(this.addKeyInfoList(querykey, count, redisId, iRedisdb));
+			
+			response.setContentType("text/json");
+			this.printWriteOut(keyInfoJson, response);
+			
+		}
 
+	}
+	
+	/**
+	 * get Key information List
+	 * @param queryKey
+	 * @param redisId
+	 * @param iRedisdb
+	 * @param queryType
+	 * @return
+	 */
+	private List<RedisKeyInfo> addKeyInfoList(String queryKey,int count, String  redisId, int iRedisdb)
+	{
+		
+		List<RedisKeyInfo> keyInfoList = new ArrayList<RedisKeyInfo>();
+		
+		List<String> keyList = new ArrayList<String>();
+		
+		//query keys
+		keyList = JedisUtil.scanRedis(queryKey, count, redisId, iRedisdb);
+			
+		
+		for (String str : keyList) {  
+			String keyType = JedisUtil.queryKeyType(str, redisId, iRedisdb);
+			
+			long keySize = 1;
+			
+			if (!keyType.equals("String"))
+			{
+				if (keyType.equals("List"))					
+				{
+					keySize = JedisUtil.llen(str, redisId, iRedisdb);
+					
+				}
+				else if (keyType.equals("Hash"))
+				{
+					keySize = JedisUtil.hlen(str, redisId, iRedisdb);
+				}
+				else if (keyType.equals("Set"))
+				{
+					keySize = JedisUtil.scard(str, redisId, iRedisdb);
+				}
+				else if (keyType.equals("Sorted Set"))
+				{
+					keySize = JedisUtil.scard(str, redisId, iRedisdb);
+				}		
+			} 
+			
+			RedisKeyInfo keyInfo  =  new RedisKeyInfo();
+			keyInfo.setKey(str);
+			keyInfo.setKeyType(keyType);
+			keyInfo.setKeySize(keySize);
+			
+			keyInfoList.add(keyInfo);
+		}
+		
+		return keyInfoList;
+		
 	}
 	
 	/**
