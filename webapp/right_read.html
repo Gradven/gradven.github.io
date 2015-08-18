@@ -31,10 +31,17 @@
 			timeout : 3000 ,	
 			dataType : 'json',
 			success: function(data){
-	   
-			   $('#showValue').html(data.key + "" + data.keyType);
+			
+			$("#project").empty(); 
+
+			   var tbody = ""; 	
 			   
-			   var tbody = ""; 			   
+			   if (data == "")
+			   {
+			      tbody = "There is no data!!! ";
+			   }
+			   
+			   		   
 			   $.each(data, function(n, item) {  
                     var trs = "";  
                     trs += " <tr> <td> " + item.key +" </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
@@ -101,10 +108,9 @@
     </form>
     <br/>
      </div>
-     result:
-     
-     <table  id = "project" border="1" > 
-     <tr> <th> name </th> <th>type</th> <th>size</th>  </tr>               
+     result:    
+     <table id ="project"  border="1" > 
+     <tr> <th> name </th> <th>type</th> <th>size</th>  </tr>     
      </table > 
      
   </body>
