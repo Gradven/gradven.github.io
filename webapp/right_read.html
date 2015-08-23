@@ -18,6 +18,8 @@
 	
 	    var querykey = $('#querykey').val();
 	    
+	    var count = $('#count').val();
+	    
 	    
 	    if (querykey == "")
 	    {
@@ -27,18 +29,22 @@
 	
    		$.ajax({
 			type: "post",
-			url: "/gradvenRedis/servlet/redisservlet?type=3&redisdb=" + redisdb +"&querykey=" + querykey,
+			url: "/gradvenRedis/servlet/redisservlet?type=3&redisdb=" + redisdb +"&querykey=" + querykey + "&count=" + count,
 			timeout : 3000 ,	
 			dataType : 'json',
 			success: function(data){
 			
-			$("#project").empty(); 
+			$("#retcount").html(eval(data).length);
+			
+			$("#project tr:not(#title)").remove(); 
 
 			   var tbody = ""; 	
 			   
 			   if (data == "")
 			   {
-			      tbody = "There is no data!!! ";
+			     var trs = "";
+			     trs += " <tr> <td colspan=3 style=\"text-align:center\"> There is none data!!! </td> <tr>";
+			     tbody += trs;
 			   }
 			   
 			   		   
@@ -48,6 +54,8 @@
                     tbody += trs;    
                          
                 });  
+                
+             // $("#retcount").html(data); 
   
               $("#project").append(tbody);  
        			
@@ -106,11 +114,14 @@
     &nbsp;
     <input type="button" name="submitkey" value="submit" onClick="queryValueByKey()"/>
     </form>
+    <div> &nbsp;&nbsp;Accept Java-compatible Regex</div>   
     <br/>
      </div>
-     result:    
+     Result count: <span id=retcount></span>  
      <table id ="project"  border="1" > 
-     <tr> <th> name </th> <th>type</th> <th>size</th>  </tr>     
+     <tr id="title" style="background:#E0E0E0; color:black"> 
+     <th style="width:200px"> name </th> <th style="width:100px">type</th> <th  style="width:100px">size</th>  
+     </tr>     
      </table > 
      
   </body>

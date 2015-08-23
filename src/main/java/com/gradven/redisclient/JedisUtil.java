@@ -50,19 +50,43 @@ public class JedisUtil {
         
         do {
         	
-        	ScanParams scanParams = new ScanParams();
-        	
+        	ScanParams scanParams = new ScanParams();        	
         	scanParams.count(count);  
         	scanParams.match(pattern);
         	
-            ScanResult<String> ret = jedis.scan(scanRet, scanParams);
-            
+            ScanResult<String> ret = jedis.scan(scanRet, scanParams);         
             scanRet = ret.getStringCursor();
             
-            retList.addAll(ret.getResult());
+            List<String> scanRetList = ret.getResult();
             
-            break;
+            int retListSize = retList.size();            
+            int scanRetListSize = scanRetList.size();
+            
+            int tmpNumber = retListSize + scanRetListSize - count;
+            
+            if (tmpNumber >= 0)
+            {
+            	int addNumber = scanRetListSize - tmpNumber;
+            	List<String> tmpList = new ArrayList<String>();
+            	
+            	for (int i = 0; i < addNumber; i++)
+            	{
+            		tmpList.add(scanRetList.get(i));
+            	}
+            	
+            	retList.addAll(tmpList);
+            	
+            	break;
+            			
+            }
+            else
+            {
+            	retList.addAll(scanRetList);
+            }
+            
+           
         } while (!scanRet.equals("0"));
+       
             
         rc.returnResouce(jedis);
         
@@ -86,6 +110,8 @@ public class JedisUtil {
 		jedis.select(databse);
 		
 		keyType = jedis.type(key);
+		
+		rc.returnResouce(jedis);
 				
 		return keyType;
 		
@@ -106,6 +132,8 @@ public class JedisUtil {
 		
 		jedis.select(databse);
 		Set<String> ret = jedis.keys(pattern);
+		
+		rc.returnResouce(jedis);
 		
 		return ret;
 		
@@ -136,6 +164,8 @@ public class JedisUtil {
 			return "The value is null !!";
 		}
 		
+		rc.returnResouce(jedis);
+		
 		return ret;
 		
 	} 
@@ -163,6 +193,8 @@ public class JedisUtil {
 		
 		jedis.llen(key);
 		
+		rc.returnResouce(jedis);
+		
 		return ret;	
 		
 	}
@@ -188,6 +220,7 @@ public class JedisUtil {
 		
 		long ret = jedis.llen(key);
 		
+		rc.returnResouce(jedis);
 		
 		return ret;	
 		
@@ -214,6 +247,7 @@ public class JedisUtil {
 		
 		long ret = jedis.scard(key);
 		
+		rc.returnResouce(jedis);
 		
 		return ret;	
 		
@@ -226,11 +260,13 @@ public class JedisUtil {
 	 */
 	public static boolean isConnected(String redisid)
 	{
+		RedisConnection rc = null;
+		Jedis jedis = null;
 		try
 		{
-			RedisConnection rc = RedisConnFactory.getRedisConn(redisid);
+			rc = RedisConnFactory.getRedisConn(redisid);
 			
-			Jedis jedis = rc.getRedisConn();
+			jedis = rc.getRedisConn();
 			
 			jedis.set("test_redis_server_is_connected", "1");
 			jedis.del("test_redis_server_is_connected");
@@ -241,8 +277,11 @@ public class JedisUtil {
 			e.printStackTrace();
 			return false;
 		}
-		
-		
+		finally
+		{
+			rc.returnResouce(jedis);
+		}
+	
 		return true;
 	}
 	

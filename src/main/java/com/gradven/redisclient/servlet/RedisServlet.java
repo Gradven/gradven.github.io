@@ -161,26 +161,28 @@ public class RedisServlet extends HttpServlet {
 			
 			long keySize = 1;
 			
-			if (!keyType.equals("String"))
+			if (keyType.equals("string"))
 			{
-				if (keyType.equals("List"))					
-				{
-					keySize = JedisUtil.llen(str, redisId, iRedisdb);
+				keySize = 1;
+			}
+			else if (keyType.equals("list"))					
+			{
+				keySize = JedisUtil.llen(str, redisId, iRedisdb);
 					
-				}
-				else if (keyType.equals("Hash"))
-				{
-					keySize = JedisUtil.hlen(str, redisId, iRedisdb);
-				}
-				else if (keyType.equals("Set"))
-				{
-					keySize = JedisUtil.scard(str, redisId, iRedisdb);
-				}
-				else if (keyType.equals("Sorted Set"))
-				{
-					keySize = JedisUtil.scard(str, redisId, iRedisdb);
-				}		
-			} 
+			}
+			else if (keyType.equals("hash"))
+			{
+				keySize = JedisUtil.hlen(str, redisId, iRedisdb);
+			}
+			else if (keyType.equals("set"))
+			{
+				keySize = JedisUtil.scard(str, redisId, iRedisdb);
+			}
+			else if (keyType.equals("sorted set"))
+			{
+				keySize = JedisUtil.scard(str, redisId, iRedisdb);
+			}		
+			 
 			
 			RedisKeyInfo keyInfo  =  new RedisKeyInfo();
 			keyInfo.setKey(str);

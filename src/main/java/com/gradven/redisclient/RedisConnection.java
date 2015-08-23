@@ -55,7 +55,11 @@ public class RedisConnection {
 	public void returnResouce(Jedis jedis)
 	{
 		//after use,return jedis to the pool
-		pool.returnResource(jedis);
+		if (jedis != null)
+		{
+			pool.returnResource(jedis);
+		}
+		
 	}
 	
 	public RedisServer getRedisServer() {
