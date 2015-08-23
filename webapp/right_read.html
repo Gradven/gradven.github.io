@@ -12,7 +12,34 @@
   </head>
   <script src="./js/jquery.js"></script>
   <script type="text/javascript">
-    function queryValueByKey()
+    
+    function queryValueByKey(queryKey)
+    {
+  
+      var redisdb = $('#redisdb').val();
+    
+      $.ajax({
+			type: "post",
+			url: "/gradvenRedis/servlet/redisservlet?type=2&redisdb=" + redisdb +"&querykey=" + queryKey,
+			timeout : 3000 ,	
+			success: function(data){
+			   
+			   
+			   $("#singleKey").html(queryKey); 
+			   $("#retValue").html(data); 		   		    
+                  
+       			
+			},	
+			error: function()
+			{				
+			  alert("error!");
+						
+			}
+		});
+       
+    }
+  
+    function queryKeysByStr()
 	{
 	    var redisdb = $('#redisdb').val();
 	
@@ -50,7 +77,7 @@
 			   		   
 			   $.each(data, function(n, item) {  
                     var trs = "";  
-                    trs += " <tr> <td> " + item.key +" </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
+                    trs += " <tr> <td> <a href=\"#\" onclick=queryValueByKey('"+item.key+"')>" + item.key +"</a> </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
                     tbody += trs;    
                          
                 });  
@@ -112,17 +139,32 @@
     Count Limit:<input type="text" name="count" id=count value="10" size=5 />
 
     &nbsp;
-    <input type="button" name="submitkey" value="submit" onClick="queryValueByKey()"/>
+    <input type="button" name="submitkey" value="submit" onClick="queryKeysByStr()"/>
     </form>
     <div> &nbsp;&nbsp;Accept Java-compatible Regex</div>   
     <br/>
      </div>
      Result count: <span id=retcount></span>  
-     <table id ="project"  border="1" > 
-     <tr id="title" style="background:#E0E0E0; color:black"> 
-     <th style="width:200px"> name </th> <th style="width:100px">type</th> <th  style="width:100px">size</th>  
-     </tr>     
-     </table > 
+     <table>
+         <tr>
+            <td>
+		     <table id ="project"  border="1" > 
+		     <tr id="title" style="background:#E0E0E0; color:black"> 
+		     <th style="width:200px"> name </th> <th style="width:100px">type</th> <th  style="width:100px">size</th>  
+		     </tr>     
+		     </table> 
+		    </td>
+	     <td>
+	    	 key: &nbsp;&nbsp;
+	    	 <textarea id="singleKey" rows="1" cols="50"></textarea>
+	    	 <br/>
+	    	 <br/>
+	    	 value:&nbsp;<textarea id="retValue" rows="5" cols="50"></textarea>
+	     </td>
+	     </tr>
+     
+     </table>
+    
      
   </body>
 </html>
