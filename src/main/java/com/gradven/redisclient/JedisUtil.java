@@ -1,6 +1,7 @@
 package com.gradven.redisclient;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -139,16 +140,24 @@ public class JedisUtil {
 		
 	}
 	
-	public static String queryValue(String key, String redisId)
+	public static List<String> queryValue(String key, String redisId)
 	{
 		return queryValue(key, redisId, 0);
 	}
 	
-	public static String queryValue(String key, String redisId, int database)
+	public static List<String> queryValue(String key, String redisId, int database)
 	{
+		List<String> list = null;
+		String retStr = "";
+		
 		if (key == null || key.equals(""))
 		{
-			return "The key is null or empty !!";
+			retStr = "The key is null or empty !!";
+			
+			list = new ArrayList<String>();
+			list.add(retStr);
+
+			return list;
 		}
 		
 		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
@@ -156,17 +165,43 @@ public class JedisUtil {
 		Jedis jedis = rc.getRedisConn();
 		jedis.select(database);
 		
-		String ret = jedis.get(key);
+		String keyType = jedis.type(key);
 		
+		System.out.println("=============:" + keyType);
 		
-		if (ret == null || ret.equals(""))
+		if (keyType.equals("string"))
 		{
-			return "The value is null !!";
+			retStr = jedis.get(key);
+			
+			if (retStr == null || retStr.equals(""))
+			{
+				retStr = "The value is null !!";				
+			}
+			
+			list = new ArrayList<String>();
+			list.add(retStr);
+		}
+		else if (keyType.equals("list"))
+		{
+			list = jedis.lrange(key, 0, -1);
+			
+		}
+		else if (keyType.equals("set"))
+		{
+			Set<String> setValues = jedis.smembers(key);
+			
+			list = new ArrayList<String>(setValues);
+		}
+		else if ( keyType.equals("zset"))
+		{
+			Set<String> setValues = jedis.zrange(key, 0, -1);
+			
+			list = new ArrayList<String>(setValues);
 		}
 		
 		rc.returnResouce(jedis);
 		
-		return ret;
+		return list;
 		
 	} 
 	

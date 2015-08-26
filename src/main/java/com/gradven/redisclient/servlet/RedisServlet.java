@@ -104,7 +104,12 @@ public class RedisServlet extends HttpServlet {
 			String redisId = (String) session.getAttribute("redisId");
 			String querykey = request.getParameter("querykey");
 			
-			String ret = JedisUtil.queryValue(querykey, redisId, iRedisdb);
+			String ret = "";
+			
+			List<String> retList = JedisUtil.queryValue(querykey, redisId, iRedisdb);
+			
+			ret = JSON.toJSONString(retList, true);
+			
 			this.printWriteOut(ret, response);
 			
 		}
@@ -136,6 +141,11 @@ public class RedisServlet extends HttpServlet {
 		}
 
 	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * get Key information List
@@ -174,11 +184,7 @@ public class RedisServlet extends HttpServlet {
 			{
 				keySize = JedisUtil.hlen(str, redisId, iRedisdb);
 			}
-			else if (keyType.equals("set"))
-			{
-				keySize = JedisUtil.scard(str, redisId, iRedisdb);
-			}
-			else if (keyType.equals("sorted set"))
+			else if (keyType.equals("set") || keyType.equals("zset"))
 			{
 				keySize = JedisUtil.scard(str, redisId, iRedisdb);
 			}		
