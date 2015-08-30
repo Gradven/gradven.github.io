@@ -167,7 +167,7 @@ public class JedisUtil {
 		
 		String keyType = jedis.type(key);
 		
-		System.out.println("=============:" + keyType);
+		//System.out.println("=============:" + keyType);
 		
 		if (keyType.equals("string"))
 		{
@@ -281,6 +281,35 @@ public class JedisUtil {
 		jedis.select(database);
 		
 		long ret = jedis.scard(key);
+		
+		
+		rc.returnResouce(jedis);
+		
+		return ret;	
+		
+	}
+	
+	/**
+	 * sort set length
+	 * @param key
+	 * @param redisId
+	 * @param database
+	 * @return
+	 */
+	public static long zcard(String key, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return 0;
+		}
+		
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
+		long ret = jedis.zcard(key);
+		
 		
 		rc.returnResouce(jedis);
 		

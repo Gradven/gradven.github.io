@@ -184,10 +184,14 @@ public class RedisServlet extends HttpServlet {
 			{
 				keySize = JedisUtil.hlen(str, redisId, iRedisdb);
 			}
-			else if (keyType.equals("set") || keyType.equals("zset"))
+			else if (keyType.equals("set"))
 			{
 				keySize = JedisUtil.scard(str, redisId, iRedisdb);
-			}		
+			}
+			else if( keyType.equals("zset"))
+			{
+				keySize = JedisUtil.zcard(str, redisId, iRedisdb);
+			}
 			 
 			
 			RedisKeyInfo keyInfo  =  new RedisKeyInfo();

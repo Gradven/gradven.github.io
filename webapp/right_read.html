@@ -26,7 +26,17 @@
 			   
 			   
 			   $("#singleKey").html(queryKey); 
-			   $("#retValue").html(data); 		   		    
+			   $("#retValue").html("");
+			   
+			   var dataArray = eval(data);  
+				for(i in dataArray)  
+				{  				   
+				   $("#retValue").append(dataArray[i]);  
+				   $("#retValue").append("\r\n");
+				
+				}  	
+				
+				 //$("#retValue").html(data); 	   		    
                   
        			
 			},	
