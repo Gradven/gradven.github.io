@@ -117,6 +117,13 @@
      var target=document.getElementById("showcount");
      target.style.display="block";
   }
+  
+  
+  function reset()
+  {
+     
+  }
+  
   </script>
   
   <body>
@@ -154,7 +161,8 @@
     <div> &nbsp;&nbsp;Accept Java-compatible Regex</div>   
     <br/>
      </div>
-     Result count: <span id=retcount></span>  
+     Result count: <span id=retcount></span> 
+     <form action="" method="get"> 
      <table>
          <tr>
             <td>
@@ -164,17 +172,33 @@
 		     </tr>     
 		     </table> 
 		    </td>
-	     <td>
+	     <td colspan=2>
 	    	 key: &nbsp;&nbsp;
-	    	 <textarea id="singleKey" rows="1" cols="50"></textarea>
+	    	 <textarea id="singleKey" rows="1" cols="50" readonly style="background:#E0E0E0;"></textarea>
 	    	 <br/>
 	    	 <br/>
 	    	 value:&nbsp;<textarea id="retValue" rows="5" cols="50"></textarea>
+	    	 
+	    	 <div>
+	    	 <br/>
+	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	 <input type="button" name="apply" id="apply" value="apply" onClick=""> 
+	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	 <input type="reset" name="cancel" id="reset" value="reset" >
+	    	 </div>
+
 	     </td>
 	     </tr>
+	     
+	     <tr id=stringMrg>
+	     <td></td>
+
+	     </tr>
+	     
      
      </table>
-    
+    </form>
      
   </body>
 </html>
