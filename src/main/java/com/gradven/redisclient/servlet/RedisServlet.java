@@ -51,6 +51,7 @@ public class RedisServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 
            this.doPost(request, response);
 	}
@@ -68,7 +69,7 @@ public class RedisServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String type = request.getParameter("type");
+		String action = request.getParameter("action");
 		String redisdb = request.getParameter("redisdb");
 		
 		int iRedisdb = 0;
@@ -83,7 +84,7 @@ public class RedisServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		
-		if (type == null || type.equals("undefined"))
+		if (action == null || action.equals("undefined"))
 		{
 			//just query redis server information
 			this.getRedisServerById(request, response);
@@ -92,13 +93,13 @@ public class RedisServlet extends HttpServlet {
 			
 			session.setAttribute("redisId", request.getParameter("id"));
 		}
-		else if(type.equals("1"))
+		else if(action.equals("1"))
 		{
 			//test redis server is connected	
 			this.testRedisIsConnected(request, response);
 			
 		}
-		else if (type.equals("2"))	
+		else if (action.equals("2"))	
 		{
 			//redis query value by key
 			String redisId = (String) session.getAttribute("redisId");
@@ -113,7 +114,7 @@ public class RedisServlet extends HttpServlet {
 			this.printWriteOut(ret, response);
 			
 		}
-		else if (type.equals("3"))
+		else if (action.equals("3"))
 		{
 			String keyInfoJson = "";
 			
@@ -138,6 +139,19 @@ public class RedisServlet extends HttpServlet {
 			response.setContentType("text/json");
 			this.printWriteOut(keyInfoJson, response);
 			
+		}
+		else if (action.equals("4"))
+		{
+			String singleKey = request.getParameter("singleKey");
+			String redisId = (String) session.getAttribute("redisId");
+			String showValue = request.getParameter("showValue");
+			
+			String retValue = "";
+			retValue = JedisUtil.setString(singleKey, showValue, redisId, iRedisdb);
+			
+			
+			
+			this.printWriteOut(retValue, response);
 		}
 
 	}

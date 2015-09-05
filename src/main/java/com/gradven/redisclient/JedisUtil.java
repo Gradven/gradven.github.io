@@ -317,6 +317,26 @@ public class JedisUtil {
 		
 	}
 	
+	public static String setString(String key,String value, String redisId, int database)
+	{
+		if (key == null || key.equals(""))
+		{
+			return null;
+		}
+		
+		RedisConnection rc = RedisConnFactory.getRedisConn(redisId);
+		
+		Jedis jedis = rc.getRedisConn();
+		jedis.select(database);
+		
+		String ret = jedis.set(key, value);		
+		
+		rc.returnResouce(jedis);
+		
+		return ret;	
+		
+	}
+	
 	/**
 	 * test redis server is alive.
 	 * @param redisid

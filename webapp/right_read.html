@@ -20,23 +20,38 @@
     
       $.ajax({
 			type: "post",
-			url: "/gradvenRedis/servlet/redisservlet?type=2&redisdb=" + redisdb +"&querykey=" + queryKey,
+			url: "/gradvenRedis/servlet/redisservlet?action=2&redisdb=" + redisdb +"&querykey=" + queryKey,
 			timeout : 3000 ,	
 			success: function(data){
 			   
 			   
-			   $("#singleKey").html(queryKey); 
-			   $("#retValue").html("");
+			  // $("#singleKey").html(queryKey); 
+			  //$("#showValue").html("");
+			  
+			  $(window.frames["right_read_string"].document).find("#sValue").html("");
 			   
-			   var dataArray = eval(data);  
+			  $(window.frames["right_read_string"].document).find("#singleKey").html(queryKey);
+			   
+	   
+			   var dataArray = eval(data); 
 				for(i in dataArray)  
-				{  				   
-				   $("#retValue").append(dataArray[i]);  
-				   $("#retValue").append("\r\n");
+				{  			   		    
+				   //$("#showValue").append(dataArray[i]);
+				   				   
+				   $(window.frames["right_read_string"].document).find("#sValue").append(dataArray[i]);
+				   
+				   //alert(dataArray[i]);
+				   
+				   if (i != dataArray.length)
+				   {
+				      //$("#showValue").append("\r\n");
+				      $(window.frames["right_read_string"].document).find("#sValue").append("\r\n");
+				   }
+				   
 				
 				}  	
 				
-				 //$("#retValue").html(data); 	   		    
+				 //$("#showValue").html(data); 	   		    
                   
        			
 			},	
@@ -66,7 +81,7 @@
 	
    		$.ajax({
 			type: "post",
-			url: "/gradvenRedis/servlet/redisservlet?type=3&redisdb=" + redisdb +"&querykey=" + querykey + "&count=" + count,
+			url: "/gradvenRedis/servlet/redisservlet?action=3&redisdb=" + redisdb +"&querykey=" + querykey + "&count=" + count,
 			timeout : 3000 ,	
 			dataType : 'json',
 			success: function(data){
@@ -156,44 +171,19 @@
     <div> &nbsp;&nbsp;Accept Java-compatible Regex</div>   
     <br/>
      </div>
-     Result count: <span id=retcount></span> 
-     <form action="" method="get"> 
-     <table>
-         <tr>
-            <td>
-		     <table id ="project"  border="1" > 
+     <div>Result count: <span id=retcount></span></div> 
+        
+    <div style="width:400px; float:left;">
+		  <table id ="project"  border="1" > 
 		     <tr id="title" style="background:#E0E0E0; color:black"> 
-		     <th style="width:200px"> name </th> <th style="width:100px">type</th> <th  style="width:100px">size</th>  
+		     <th style="width:200px"> name </th><th style="width:100px">type</th> <th  style="width:100px">size</th>  
 		     </tr>     
-		     </table> 
-		    </td>
-	     <td colspan=2>
-	    	 key: &nbsp;&nbsp;
-	    	 <textarea id="singleKey" rows="1" cols="50" readonly style="background:#E0E0E0;"></textarea>
-	    	 <br/>
-	    	 <br/>
-	    	 value:&nbsp;<textarea id="retValue" rows="5" cols="50"></textarea>
-	    	 
-	    	 <div>
-	    	 <br/>
-	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	 <input type="button" name="apply" id="apply" value="apply" onClick=""> 
-	    	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	 <input type="reset" name="cancel" id="reset" value="reset" >
-	    	 </div>
-
-	     </td>
-	     </tr>
-	     
-	     <tr id=stringMrg>
-	     <td></td>
-
-	     </tr>
-	     
-     
-     </table>
-    </form>
+		  </table> 
+    </div> 
+    <div style="width:50px; float:left;">&nbsp;</div>
+    <div style="width:600px; float:left;"> 
+	     <iframe src="right_read_string.html" name="right_read_string" id="right_read_string" title="right_read_string" style="width:600px;height:300px"></iframe>
+    </div>
      
   </body>
 </html>

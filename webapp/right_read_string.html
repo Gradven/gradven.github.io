@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <script type="text/javascript">
+  function applyData()
+  {
+  
+     var redisdb = $('#redisdb').val();
+     $.ajax({
+                cache: false,
+                type: "POST",
+                url:"/gradvenRedis/servlet/redisservlet?action=4&redisdb=" + redisdb,
+                data:$("#applyData").serialize(),
+                async: true,
+                error: function(request) {
+                    alert("error!");
+                },
+                success: function(data) {
+                   alert("success!");
+                }
+     });
+  }
+  
+  
+  </script>
+  
+  <body style="background:#F0F0F0;">
+  
+  <table>
+  <tr>
+  <td></td>
+  <td></td>
+  </tr>
+    <tr>
+  <td>key: </td>
+  <td><textarea id="singleKey" name="singleKey" rows="1" cols="50" readonly style="background:#E0E0E0;"></textarea></td>
+  </tr>
+  <tr>
+  <td>value:</td>
+  <td><textarea id="sValue" name="sValue" rows="5" cols="50"></textarea></td>
+  </tr>
+   <tr>
+  <td></td>
+  <td><input type="button" name="apply" id="apply" value="apply" onClick="applyData()" />&nbsp;<input type="reset" name="reset" id="reset" value="reset" ></td>
+  </tr>  
+  
+  </table>
+  </body>
+</html>	
