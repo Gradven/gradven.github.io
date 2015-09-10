@@ -144,12 +144,10 @@ public class RedisServlet extends HttpServlet {
 		{
 			String singleKey = request.getParameter("singleKey");
 			String redisId = (String) session.getAttribute("redisId");
-			String showValue = request.getParameter("showValue");
+			String sValue = request.getParameter("sValue");
 			
 			String retValue = "";
-			retValue = JedisUtil.setString(singleKey, showValue, redisId, iRedisdb);
-			
-			
+			retValue = JedisUtil.setString(singleKey, sValue, redisId, iRedisdb);			
 			
 			this.printWriteOut(retValue, response);
 		}
