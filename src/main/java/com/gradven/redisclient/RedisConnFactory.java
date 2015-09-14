@@ -14,7 +14,8 @@ public class RedisConnFactory {
 		//if find RedisConnection, return RedisConnection;
 		for (RedisConnection rc : connList)
 		{
-			if (rc.getRedisServer().getId().equals(redisId))
+			String id = rc.getRedisServer().getId();
+			if (id.equals(redisId))
 			{
 				return rc;
 			}

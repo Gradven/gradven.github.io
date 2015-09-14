@@ -47,20 +47,26 @@
   </tr>
     <tr>
   <td>key: </td>
-  <td>
+  <td colspan=3>
   <textarea id="singleKey" name="singleKey" rows="1" cols="50" readonly style="background:#E0E0E0;"></textarea>
   </td>
-  </tr>
+  </tr> 
+  </table>
+  
+ <div>
+  <table id ="project" >
   <tr>
   <td>value:</td>
-  <td><textarea id="sValue" name="sValue" rows="5" cols="50"></textarea></td>
+  <td><input id="sValue" name="sValue" size=50></td>
+  <td>
+  <input type="button" name="apply" id="apply" value="apply" onClick="applyData()" />
+  </td>
+  <td>
+     <input type="reset" name="reset" id="reset" value="reset" />
+  </td>
   </tr>
-   <tr>
-  <td></td>
-  <td><input type="button" name="apply" id="apply" value="apply" onClick="applyData()" />&nbsp;<input type="reset" name="reset" id="reset" value="reset" ></td>
-  </tr>  
-  
   </table>
+ </div>
   </form>
   </body>
   

@@ -13,7 +13,7 @@
   <script src="./js/jquery.js"></script>
   <script type="text/javascript">
     
-    function queryValueByKey(queryKey)
+    function queryValueByKey(queryKey, queryType)
     {
   
       var redisdb = $('#redisdb').val();
@@ -28,23 +28,45 @@
 			  // $("#singleKey").html(queryKey); 
 			  //$("#showValue").html("");
 			  
-			  $(window.frames["right_read_string"].document).find("#sValue").html("");
+			  var dataArray = eval(data); 
+			  
 			   
-			  $(window.frames["right_read_string"].document).find("#singleKey").html(queryKey);
-			   
-	   
-			   var dataArray = eval(data); 
-				for(i in dataArray)  
-				{  			   		    
-				   //$("#showValue").append(dataArray[i]);
-				   				   
-				   $(window.frames["right_read_string"].document).find("#sValue").val(dataArray[i]);
-				   
-				   //alert(dataArray[i]);
-				   			
-				}  	
-				
-				 //$("#showValue").html(data); 	   		    
+			   if(queryType == "string")
+			   {
+			      $("#span_string").show();
+			      $("#span_list").hide();
+			      
+			      $(window.frames["right_read_string"].document).find("#sValue").html("");			   
+			      $(window.frames["right_read_string"].document).find("#singleKey").html(queryKey);
+			      
+			      for(i in dataArray)  
+				  { 				   				   
+				    $(window.frames["right_read_string"].document).find("#sValue").val(dataArray[i]); 			
+				  } 
+			   }
+			   else if (queryType == "list")
+			   {
+			      $("#span_string").hide();
+			      $("#span_list").show();
+			      
+			      $(window.frames["right_read_list"].document).find("#project tr:not(#title)").remove(); 
+			      			   
+			      $(window.frames["right_read_list"].document).find("#singleKey").html(queryKey);
+			      
+			      var tbody = "";	
+			      for(i in dataArray)  
+				  { 
+				  
+				    var trs = "";
+			        trs += " <tr> <td>value:</td><td><input type=\"text\" size=\"50\" value="+dataArray[i]+" </td> <tr>";
+			        tbody += trs;	
+			        			   				    			
+				  } 
+				  
+				  $(window.frames["right_read_list"].document).find("#project").append(tbody); 
+			   }
+			   	
+			   //$("#showValue").html(data); 	   		    
                   
        			
 			},	
@@ -95,7 +117,7 @@
 			   		   
 			   $.each(data, function(n, item) {  
                     var trs = "";  
-                    trs += " <tr> <td> <a href=\"#\" onclick=queryValueByKey('"+item.key+"')>" + item.key +"</a> </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
+                    trs += " <tr> <td> <a href=\"#\" onclick=queryValueByKey('"+item.key+"','"+item.keyType+"')>" + item.key +"</a> </td> <td>" + item.keyType +" </td><td>" + item.keySize +"</td> </tr>";  
                     tbody += trs;    
                          
                 });  
@@ -175,7 +197,12 @@
     </div> 
     <div style="width:50px; float:left;">&nbsp;</div>
     <div style="width:600px; float:left;"> 
-	     <iframe src="right_read_string.html" name="right_read_string" id="right_read_string" title="right_read_string" style="width:600px;height:300px"></iframe>
+	    <span id=span_string > 
+	    <iframe src="right_read_string.html" name="right_read_string" id="right_read_string" title="right_read_string" style="width:600px;height:300px"></iframe>
+	    </span>
+	     <span id=span_list style="display:none">
+	     <iframe src="right_read_list.html" name="right_read_list" id="right_read_list" title="right_read_list" style="width:600px;height:300px"></iframe>
+	     </span>
     </div>
      
   </body>
