@@ -14,8 +14,8 @@ import com.gradven.redisclient.redisinfo.RedisServer;
  */
 public class RedisServerManager {
 	
-	//public static final String redisServerFile = "../webapps/gradvenRedis/json/redis_servers.json";
-	public static final String redisServerFile = "E:\\Workspaces\\MyEclipse2014\\gradvenRedis\\webapp\\json\\redis_servers.json";
+	public static final String redisServerFile = "../webapps/gradvenRedis/json/redis_servers.json";
+	//public static final String redisServerFile = "E:\\Workspaces\\MyEclipse2014\\gradvenRedis\\webapp\\json\\redis_servers.json";
 	
 	private static List<RedisRoot> list;
 	
