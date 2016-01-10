@@ -3,7 +3,6 @@
   <groupId>com.gradven</groupId>
   <artifactId>gradvenRedis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
   <dependencies>
   <dependency>
 			<groupId>redis.clients</groupId>
